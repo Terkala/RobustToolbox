@@ -896,7 +896,7 @@ public abstract partial class SharedPhysicsSystem
         }
 
         island.PositionSolved = false;
-        var contactsOkay = false; // Starlight
+        var contactsOkay = false; // Starlight 
 
         for (var i = 0; i < data.PositionIterations; i++)
         {
