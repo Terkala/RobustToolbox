@@ -922,7 +922,7 @@ public abstract partial class SharedPhysicsSystem
 
         for (var i = 0; i < data.PositionIterations; i++)
         {
-            var contactsOkay = SolvePositionConstraints(in data, in island, options, positionConstraints, positions, angles); // Starlight
+            contactsOkay = SolvePositionConstraints(in data, in island, options, positionConstraints, positions, angles); // Starlight
             var jointsOkay = true;
 
             for (var j = 0; j < island.Joints.Count; ++j)

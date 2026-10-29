@@ -392,6 +392,8 @@ public abstract partial class SharedPhysicsSystem
             return false;
 
         return true;
+    }
+
     private readonly struct AnyFixtureOverlapCallback : IFixtureQueryCallback<bool>
     {
         public bool Invoke(ref bool state, in FixtureProxy fixture)
