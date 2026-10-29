@@ -925,10 +925,6 @@ public abstract partial class SharedPhysicsSystem
         island.PositionSolved = false;
         var contactsOkay = false; // Starlight 
 
-        // Starlight - start
-        var contactsOkay = false;
-        // Starlight - end
-
         for (var i = 0; i < data.PositionIterations; i++)
         {
             contactsOkay = SolvePositionConstraints(in data, in island, options, positionConstraints, positions, angles); // Starlight
