@@ -770,6 +770,7 @@ public abstract partial class SharedPhysicsSystem
         var gravity = Gravity;
 
         // Starlight - start
+        var shouldPrepareClippingRecovery = false;
         var shouldCheckClippingRecovery = false;
         // Starlight - end
 
@@ -779,13 +780,17 @@ public abstract partial class SharedPhysicsSystem
             var body = bodyEnt.Comp1;
 
             // Starlight - start
-            if (body.ClippingRecoveryDirection != Vector2.Zero ||
-                (!prediction &&
-                    body.BodyType == BodyType.KinematicController &&
-                    body.ContactCount > 0) ||
-                (!prediction && data.SleepAllowed &&
-                    body.BodyType == BodyType.Dynamic && body.SleepingAllowed &&
-                    body.SleepTime + data.FrameTime >= data.TimeToSleep))
+            if (body.ClippingRecoveryDirection != Vector2.Zero)
+            {
+                shouldPrepareClippingRecovery = true;
+                shouldCheckClippingRecovery = true;
+            }
+            else if (!prediction &&
+                     (body.ClippingRecoveryTime > 0f ||
+                      (data.SleepAllowed &&
+                       body.BodyType == BodyType.Dynamic &&
+                       body.SleepingAllowed &&
+                       body.SleepTime + data.FrameTime >= data.TimeToSleep)))
             {
                 shouldCheckClippingRecovery = true;
             }
@@ -913,12 +918,16 @@ public abstract partial class SharedPhysicsSystem
         }
 
         // Starlight - start
-        if (shouldCheckClippingRecovery)
+        if (shouldPrepareClippingRecovery)
             PrepareClippingRecoveryPositionConstraints(in island, positionConstraints);
         // Starlight - end
 
         island.PositionSolved = false;
         var contactsOkay = false; // Starlight 
+
+        // Starlight - start
+        var contactsOkay = false;
+        // Starlight - end
 
         for (var i = 0; i < data.PositionIterations; i++)
         {
@@ -945,7 +954,7 @@ public abstract partial class SharedPhysicsSystem
         }
 
         // Starlight - start
-        if (shouldCheckClippingRecovery &&
+        if ((!contactsOkay || shouldCheckClippingRecovery) &&
             RecoverClippedBodies(
                 in data,
                 in island,
@@ -954,6 +963,7 @@ public abstract partial class SharedPhysicsSystem
                 angles,
                 linearVelocities,
                 angularVelocities,
+                contactsOkay,
                 prediction))
         {
             island.PositionSolved = false;

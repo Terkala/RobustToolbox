@@ -73,9 +73,14 @@ internal sealed class ClippingRecoveryTest
         var recoveryDirection = Vector2.Zero;
         var observedRecovery = false;
         var firstRecoveryFrame = -1;
+        const int minimumRecoveryDelayFrames = 10;
         for (var i = 0; i < 600; i++)
         {
             physicsSystem.Update(1f / 30f);
+
+            if (bodyType == BodyType.KinematicController && i < minimumRecoveryDelayFrames)
+                Assert.That(item.ClippingRecoveryDirection, Is.EqualTo(Vector2.Zero));
+
             if (item.ClippingRecoveryDirection == Vector2.Zero)
                 continue;
 
@@ -93,7 +98,7 @@ internal sealed class ClippingRecoveryTest
 
         Assert.That(observedRecovery, Is.True);
         if (bodyType == BodyType.KinematicController)
-            Assert.That(firstRecoveryFrame, Is.LessThan(5));
+            Assert.That(firstRecoveryFrame, Is.GreaterThanOrEqualTo(minimumRecoveryDelayFrames)); // Starlight
 
         var finalPosition = transformSystem.GetWorldPosition(itemUid);
         Assert.That(

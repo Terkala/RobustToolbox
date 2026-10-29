@@ -13,4 +13,5 @@ public sealed partial class PhysicsComponent
     internal uint TransformStamp;
     internal Transform TransformCache;
     internal Contact? IslandContactHead;
+    internal float ClippingRecoveryTime;
 }
