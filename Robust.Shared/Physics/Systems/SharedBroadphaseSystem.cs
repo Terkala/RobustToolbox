@@ -535,7 +535,7 @@ namespace Robust.Shared.Physics.Systems
         {
             foreach (var contact in fixture.Contacts.Values)
             {
-                contact.Flags |= ContactFlags.Filter;
+                _physicsSystem.FlagContactForFilter(contact);
             }
 
             if (!Resolve(uid, ref xform))

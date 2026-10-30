@@ -92,6 +92,16 @@ public abstract partial class SharedPhysicsSystem
         return false;
     }
 
+    /// <summary>
+    /// Marks a contact for filtering and puts it on the collide queue. A settled pair is otherwise
+    /// off that queue, and <see cref="CollideContacts"/> only reads <see cref="ContactFlags.Filter"/> there.
+    /// </summary>
+    internal void FlagContactForFilter(Contact contact)
+    {
+        contact.Flags |= ContactFlags.Filter;
+        EnqueueCollide(contact);
+    }
+
     internal void EnqueueCollide(Contact contact)
     {
         if (contact.QueuedForCollide)
